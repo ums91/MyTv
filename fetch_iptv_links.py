@@ -62,41 +62,39 @@ def validate_link(channel_info):
         print(f"Connection error for link {url}: {e}")
     return None
 
+def load_existing_links():
+    """Load existing links from OUTPUT_FILE to avoid duplicates."""
+    existing_links = set()
+    try:
+        with open(OUTPUT_FILE, "r") as f:
+            content = f.readlines()
+            for i in range(0, len(content), 2):  # Read EXTINF and link pairs
+                if i + 1 < len(content):
+                    channel_name = content[i].strip()
+                    link = content[i + 1].strip()
+                    existing_links.add((channel_name, link))
+    except FileNotFoundError:
+        pass
+    return existing_links
+
 def save_links(valid_links):
     """Save validated links with channel names to .m3u file, avoiding duplicates."""
-    existing_links = load_existing_links()
+    existing_links = load_existing_links()  # Load existing entries to avoid duplicates
     new_links = []
-    
-    # Use a set to track channels already added in this run
-    seen_channels = set(existing_links)
-    
-    for channel_name, link in valid_links:
-        # Check for duplication based on link and channel name
-        if link not in seen_channels:
-            new_links.append((channel_name, link))
-            seen_channels.add(link)
 
-    # Write new links if there are any
-    if new_links:
-        with open(OUTPUT_FILE, "w") as f:  # Overwrite the file with new links
-            for channel_name, link in new_links:
+    # Use a set to track all unique (channel_name, link) pairs
+    all_links = existing_links.union(valid_links)
+
+    # Only save if there are new links to add
+    if all_links != existing_links:
+        with open(OUTPUT_FILE, "w") as f:  # Write all links, old and new, to the file
+            for channel_name, link in all_links:
                 f.write(f"#EXTINF:-1,{channel_name}\n{link}\n")
 
-        with open(LOG_FILE, "w") as log:  # Overwrite the log file with all seen links
-            log.write("\n".join(seen_channels) + "\n")
-
-        update_readme(new_links)  # Update README with new links
-        print(f"Saved {len(new_links)} new links to {OUTPUT_FILE}")
+        update_readme(valid_links)  # Update README with new links
+        print(f"Updated {OUTPUT_FILE} with {len(all_links - existing_links)} new links.")
     else:
         print("No new links found to add.")
-
-def load_existing_links():
-    """Load existing links to avoid duplicates."""
-    try:
-        with open(LOG_FILE, "r") as f:
-            return set(f.read().splitlines())
-    except FileNotFoundError:
-        return set()
 
 def update_readme(new_links):
     """Update README.md with newly found working channels, replacing previous entries."""
