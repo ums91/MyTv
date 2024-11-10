@@ -25,20 +25,19 @@ jobs:
 
       - name: Run IPTV Link Fetch Script
         env:
-          GITHUB_TOKEN: ${{ secrets.TV_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TV_TOKEN }}  # Ensure this matches the token used in your script
         run: |
-          python fetch_iptv_links.py
+          python fetch_iptv_links.py  # Update to your actual script filename
 
       - name: Commit changes
         if: success()
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add working_channels.m3u channel_log.txt
+          git add working_channels.m3u channel_log.txt README.md
           git commit -m "Updated IPTV links on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
 
       - name: Push changes
         if: success()
         run: |
           git push origin ${{ github.ref }}
-
