@@ -29,17 +29,22 @@ jobs:
     - name: Run IPTV fetch script
       run: python fetch_iptv_links.py  # Run the correct script
 
-    - name: Commit changes if any
+    - name: Stash any changes if present
       run: |
-        git add .
-        git commit -m "Update IPTV links" || echo "No changes to commit"  # Commit changes if any
+        git diff --quiet || git stash  # Stash any changes if there are any unstaged changes
 
     - name: Pull latest changes from remote
       run: |
         git pull origin main --rebase  # Fetch the latest changes and rebase
 
-    - name: Push changes
+    - name: Apply stashed changes
       run: |
-        git push origin main  # Push the changes after pull
+        git stash pop || echo "No stashed changes to apply"  # Apply stashed changes if any
+
+    - name: Commit and push changes
+      run: |
+        git add .
+        git commit -m "Update IPTV links" || echo "No changes to commit"  # Commit changes if any
+        git push origin main  # Push the changes after pull and rebase
       env:
         TV_TOKEN: ${{ secrets.TV_TOKEN }}
