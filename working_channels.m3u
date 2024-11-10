@@ -55,10 +55,6 @@ http://221.120.204.4/SONY-HD-LOCKLE/tracks-v1a1/mono.m3u8
 http://45.127.56.3:9698/live/Corpus-POL/SRV4/1/SONY-AATH/video.m3u8
 
 
-#EXTM3U
-#EXTINF:-1, Bloginstall
-#EXTINF:-1, bloginstall.com
-
 #EXTINF:-1 tvg-id="301" tvg-name="Super Cricket" tvg-logo="https://www.thesportsdb.com/images/media/channel/tvlogo/srtijz1643382350.png" group-title="IPL",Super Cricket
 https://catowrap.live/mrgamingsscric.m3u8
 #EXTINF:-1 tvg-id="302" tvg-name="SKY Cricket" tvg-logo="https://www.sportspromedia.com/wp-content/uploads/2023/04/Sky_Sports_Logo_September_2020-1.png" group-title="IPL",Sky Cricket
