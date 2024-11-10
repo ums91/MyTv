@@ -7,13 +7,14 @@ from datetime import datetime
 # File to save working channels and keep track of duplicates
 OUTPUT_FILE = "working_channels.m3u"
 LOG_FILE = "channel_log.txt"
+README_FILE = "README.md"
 
 # Initial list of public IPTV playlist URLs
 IPTV_SOURCES = [
     "https://iptv-org.github.io/iptv/index.m3u",
     "https://iptv-org.github.io/iptv/countries/pk.m3u",
     "https://github.com/Free-TV/IPTV/blob/master/playlist.m3u8",
-    "https://gist.github.com/didarulcseiubat17/8e643cd89a2ddecb4a8c6f1233cebb5f"
+    "https://gist.github.com/didarulcseiubat17/8e643cd89a2ddecb4a8c6f1233cebb5f",
     "https://pdfcoffee.com/ipljiotvandairtel-iptv-m3u-playliststxt-4-pdf-free.html"
 ]
 
@@ -93,9 +94,23 @@ def save_links(valid_links):
         with open(LOG_FILE, "a") as log:
             log.write("\n".join(link for _, link in new_links) + "\n")
 
+        update_readme(new_links)  # Update README with new links
+
         print(f"Saved {len(new_links)} new links to {OUTPUT_FILE}")
     else:
         print("No new links found to add.")
+
+def update_readme(new_links):
+    """Update README.md with newly found working channels."""
+    try:
+        with open(README_FILE, "a") as readme:
+            readme.write("\n## New Working Channels Found\n")
+            readme.write(f"Updated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+            for channel_name, link in new_links:
+                readme.write(f"- **{channel_name}**: [Stream Link]({link})\n")
+        print("README.md updated with new channels.")
+    except IOError as e:
+        print(f"Error updating README.md: {e}")
 
 def main():
     # Step 1: Load initial and new sources
