@@ -15,6 +15,10 @@ IPTV_SOURCES = [
     "https://iptv-org.github.io/iptv/countries/pk.m3u",
     "https://github.com/Free-TV/IPTV/blob/master/playlist.m3u8",
     "https://gist.github.com/didarulcseiubat17/8e643cd89a2ddecb4a8c6f1233cebb5f",
+    "https://alliptvlinks.com/free-fta-iptv-list",
+    "https://www.isitiptv.com/working-iptv-m3u-playlist-urls-list",
+    "https://pdfcoffee.com/iptv-m3u-2-pdf-free.html",
+    "https://pdfcoffee.com/iptv-m3u-pdf-free.html",
     "https://pdfcoffee.com/ipljiotvandairtel-iptv-m3u-playliststxt-4-pdf-free.html"
 ]
 
