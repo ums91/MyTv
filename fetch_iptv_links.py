@@ -1,6 +1,5 @@
 import requests
 import re
-import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
@@ -21,19 +20,12 @@ IPTV_SOURCES = [
     "https://github.com/iptv-org/iptv/blob/master/streams/in_samsung.m3u",
     "https://raw.githubusercontent.com/iptv-org/iptv/refs/heads/master/streams/ae.m3u",
     "https://github.com/Free-TV/IPTV/blob/master/playlist.m3u8",
-    "https://gist.github.com/didarulcseiubat17/8e643cd89a2ddecb4a8c6f1233cebb5f",
-    "https://www.isitiptv.com/working-iptv-m3u-playlist-urls-list",
-    "https://pdfcoffee.com/iptv-m3u-2-pdf-free.html",
-    "https://pdfcoffee.com/iptv-m3u-pdf-free.html",
-    "https://pdfcoffee.com/ipljiotvandairtel-iptv-m3u-playliststxt-4-pdf-free.html"
+    "https://gist.github.com/didarulcseiubat17/8e643cd89a2ddecb4a8c6f1233cebb5f"
 ]
 
-# Regex pattern for m3u8 links and channel names in EXTINF lines
+# Regex patterns for m3u8 links and channel names in EXTINF lines
 M3U8_PATTERN = re.compile(r"(http[s]?://[^\s]+\.m3u8)")
 EXTINF_PATTERN = re.compile(r"#EXTINF:[^\n]*,(.*)")
-
-# Query URL for finding new IPTV links
-SEARCH_QUERY_URL = "https://www.google.com/search?q=free+live+TV+channels+in+m3u8+format"
 
 def fetch_links(playlist_url):
     """Fetch and extract .m3u8 links along with channel names from a playlist URL."""
@@ -57,18 +49,6 @@ def fetch_links(playlist_url):
         print(f"Failed to fetch from {playlist_url}: {e}")
         return []
 
-def search_for_new_sources():
-    """Search for additional IPTV sources."""
-    try:
-        response = requests.get(SEARCH_QUERY_URL, timeout=10)
-        response.raise_for_status()
-        new_sources = M3U8_PATTERN.findall(response.text)
-        print(f"Found {len(new_sources)} new sources from search.")
-        return new_sources
-    except requests.RequestException as e:
-        print(f"Failed to fetch search results: {e}")
-        return []
-
 def validate_link(channel_info):
     """Validate .m3u8 link by checking HTTP status and return with channel name."""
     channel_name, url = channel_info
@@ -83,25 +63,17 @@ def validate_link(channel_info):
         print(f"Connection error for link {url}: {e}")
     return None
 
-def load_existing_links():
-    """Load existing links to avoid duplicates."""
-    try:
-        with open(LOG_FILE, "r") as f:
-            return set(f.read().splitlines())
-    except FileNotFoundError:
-        return set()
-
 def save_links(valid_links):
     """Save validated links with channel names to .m3u file, avoiding duplicates."""
     existing_links = load_existing_links()
     new_links = [(name, link) for name, link in valid_links if link not in existing_links]
 
     if new_links:
-        with open(OUTPUT_FILE, "a") as f:
+        with open(OUTPUT_FILE, "w") as f:  # Overwrite the file with new links
             for channel_name, link in new_links:
-                f.write(f"#EXTINF:-1,{channel_name} - {datetime.now()}\n{link}\n")
+                f.write(f"#EXTINF:-1,{channel_name}\n{link}\n")
 
-        with open(LOG_FILE, "a") as log:
+        with open(LOG_FILE, "w") as log:  # Overwrite the log file with new links
             log.write("\n".join(link for _, link in new_links) + "\n")
 
         update_readme(new_links)  # Update README with new links
@@ -110,14 +82,35 @@ def save_links(valid_links):
     else:
         print("No new links found to add.")
 
-def update_readme(new_links):
-    """Update README.md with newly found working channels."""
+def load_existing_links():
+    """Load existing links to avoid duplicates."""
     try:
-        with open(README_FILE, "a") as readme:
-            readme.write("\n## New Working Channels Found\n")
-            readme.write(f"Updated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
-            for channel_name, link in new_links:
-                readme.write(f"- **{channel_name}**: [Stream Link]({link})\n")
+        with open(LOG_FILE, "r") as f:
+            return set(f.read().splitlines())
+    except FileNotFoundError:
+        return set()
+
+def update_readme(new_links):
+    """Update README.md with newly found working channels, replacing previous entries."""
+    try:
+        with open(README_FILE, "r") as readme:
+            lines = readme.readlines()
+
+        # Find the "## New Working Channels Found" section in README and replace it
+        start_idx = next((i for i, line in enumerate(lines) if "## New Working Channels Found" in line), None)
+        end_idx = next((i for i in range(start_idx + 1, len(lines)) if lines[i].startswith("## ")), len(lines)) if start_idx is not None else None
+
+        new_content = ["## New Working Channels Found\n", f"Updated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"]
+        new_content.extend([f"- **{channel_name}**: [Stream Link]({link})\n" for channel_name, link in new_links])
+
+        if start_idx is not None and end_idx is not None:
+            lines = lines[:start_idx] + new_content + lines[end_idx:]
+        else:
+            lines.extend(new_content)
+
+        with open(README_FILE, "w") as readme:
+            readme.writelines(lines)
+
         print("README.md updated with new channels.")
     except IOError as e:
         print(f"Error updating README.md: {e}")
@@ -125,7 +118,6 @@ def update_readme(new_links):
 def main():
     # Step 1: Load initial and new sources
     all_sources = set(IPTV_SOURCES)
-    all_sources.update(search_for_new_sources())
 
     # Step 2: Fetch and validate links
     all_links = []
