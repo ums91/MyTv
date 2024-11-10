@@ -1,1 +1,44 @@
+name: Update IPTV Links
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"  # Runs every 6 hours
+  workflow_dispatch:        # Allows manual triggering of the workflow
+
+jobs:
+  update_iptv:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run IPTV Link Fetch Script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python fetch_iptv_links.py
+
+      - name: Commit changes
+        if: success()
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add working_channels.m3u channel_log.txt
+          git commit -m "Updated IPTV links on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+
+      - name: Push changes
+        if: success()
+        run: |
+          git push origin ${{ github.ref }}
 
