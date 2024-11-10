@@ -163,7 +163,7 @@ https://nhkworld.webcdn.stream.ne.jp/www11/nhkworld-tv/global/2003458/live.m3u8
 https://austchannel-live.akamaized.net/hls/live/2002739/foxsportsnews/index.m3u8
 
 #EXTINF:-1,STAR SPORTS 2 (IN)
-http://51.15.8.16:8081/ind1live/starsports2/playlist.m3u8
+http://starshare.live:8080/live/sachin/sachin/239.m3u8
 
 #EXTINF:-1,CHANNEL 9 (BD)
 http://119.148.13.138:1935/CHANNEL9BD/CHANNEL9BD/playlist.m3u8
