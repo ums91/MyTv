@@ -1,4 +1,6 @@
-# MyTv
+# New channels added
+
+## MyTv
 
 **Dynamic Source Search:** Adds functionality to search for new .m3u8 links using a search query.  
 **Duplicate Detection:** Adds a mechanism to store and check for duplicates, so new channels are only added if they’re unique.  
