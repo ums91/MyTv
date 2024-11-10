@@ -80,11 +80,11 @@ https://a.jsrdn.com/broadcast/e9b4093a41/+0000/high/c.m3u8
 
 
 #EXTINF:-1 tvg-id="143" tvg-name="CNBC Tv18 Prime HD" tvg-type="Business" group-title=JioTV Business" tvg-language="English" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/CNBC_Tv18_Prime_HD.png",CNBC Tv18 Prime HD
-https://jioapi.sports247.eu.org/api/app/live.php?id=143&e=.m3u8
+https://jioapi.sports247.eu.org/api/app/live.php?id=143&e.m3u8
 #EXTINF:-1 tvg-id="144" tvg-name="Colors HD" tvg-type="Entertainment" group-title=JioTV Entertainment" tvg-language="Hindi" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/Colors_HD.png",Colors HD
-https://jioapi.sports247.eu.org/api/app/live.php?id=144&e=.m3u8
+https://jioapi.sports247.eu.org/api/app/live.php?id=144&e.m3u8
 #EXTINF:-1 tvg-id="146" tvg-name="History TV18 HD" tvg-type="Infotainment" group-title=JioTV Infotainment" tvg-language="English" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/History_HD.png",History TV18 HD
-https://jioapi.sports247.eu.org/api/app/live.php?id=146&e=.m3u8
+https://jioapi.sports247.eu.org/api/app/live.php?id=146&e.m3u8
 #EXTINF:-1 tvg-id="153" tvg-name="Zee Talkies" tvg-type="Movies" group-title=JioTV Movies" tvg-language="Marathi" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/Zee_Talkies.png",Zee Talkies
 https://jioapi.sports247.eu.org/api/app/live.php?id=153&e=.m3u8
 #EXTINF:-1 tvg-id="154" tvg-name="Sony SAB" tvg-type="Entertainment" group-title=JioTV Entertainment" tvg-language="Hindi" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/Sony_SAB.png",Sony SAB
