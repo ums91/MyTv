@@ -11,11 +11,17 @@ README_FILE = "README.md"
 
 # Initial list of public IPTV playlist URLs
 IPTV_SOURCES = [
-    "https://iptv-org.github.io/iptv/index.m3u",
-    "https://iptv-org.github.io/iptv/countries/pk.m3u",
+    "https://github.com/iptv-org/iptv/blob/master/streams/at_samsung.m3u",
+    "https://github.com/iptv-org/iptv/blob/master/streams/pk.m3u",
+    "https://github.com/iptv-org/iptv/blob/master/streams/qa.m3u",
+    "https://github.com/iptv-org/iptv/blob/master/streams/sa.m3u",
+    "https://github.com/iptv-org/iptv/blob/master/streams/uk.m3u",
+    "https://github.com/iptv-org/iptv/blob/master/streams/us.m3u",
+    "https://github.com/iptv-org/iptv/blob/master/streams/in.m3u",
+    "https://github.com/iptv-org/iptv/blob/master/streams/in_samsung.m3u",
+    "https://raw.githubusercontent.com/iptv-org/iptv/refs/heads/master/streams/ae.m3u",
     "https://github.com/Free-TV/IPTV/blob/master/playlist.m3u8",
     "https://gist.github.com/didarulcseiubat17/8e643cd89a2ddecb4a8c6f1233cebb5f",
-    "https://alliptvlinks.com/free-fta-iptv-list",
     "https://www.isitiptv.com/working-iptv-m3u-playlist-urls-list",
     "https://pdfcoffee.com/iptv-m3u-2-pdf-free.html",
     "https://pdfcoffee.com/iptv-m3u-pdf-free.html",
