@@ -29,6 +29,10 @@ jobs:
     - name: Run IPTV fetch script
       run: python fetch_iptv_links.py  # Run the correct script
 
+    - name: Pull latest changes from remote
+      run: |
+        git pull origin main --rebase
+
     - name: Commit and push changes
       run: |
         git config --global user.name "GitHub Actions"
