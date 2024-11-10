@@ -3,17 +3,18 @@ name: Update IPTV Links
 on:
   schedule:
     - cron: '0 0 */2 * *'  # Runs every 2 days at midnight
-  workflow_dispatch:
+  workflow_dispatch:  # Allow manual trigger
 
 jobs:
-  update_links:
+  update-iptv-links:
     runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python environment
+      uses: actions/setup-python@v3
       with:
         python-version: '3.x'
 
@@ -22,29 +23,16 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests
 
-    - name: Ensure channel_log.txt exists if required by the script
+    - name: Fetch and update IPTV links
       run: |
-        touch channel_log.txt  # Create the file if it doesn't exist
-
-    - name: Run IPTV fetch script
-      run: python fetch_iptv_links.py  # Run the correct script
-
-    - name: Stash any changes if present
-      run: |
-        git diff --quiet || git stash  # Stash any changes if there are any unstaged changes
-
-    - name: Pull latest changes from remote
-      run: |
-        git pull origin main --rebase  # Fetch the latest changes and rebase
-
-    - name: Apply stashed changes
-      run: |
-        git stash pop || echo "No stashed changes to apply"  # Apply stashed changes if any
+        python fetch_iptv_links.py  # Run your script to fetch and update the IPTV links
 
     - name: Commit and push changes
       run: |
+        git config --global user.email "you@example.com"
+        git config --global user.name "GitHub Actions"
         git add .
-        git commit -m "Update IPTV links" || echo "No changes to commit"  # Commit changes if any
-        git push origin main  # Push the changes after pull and rebase
+        git commit -m "Update IPTV links"
+        git push origin main
       env:
-        TV_TOKEN: ${{ secrets.TV_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.TV_TOKEN }}  # Use the TV_TOKEN secret for authentication
