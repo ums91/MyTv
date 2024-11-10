@@ -20,14 +20,14 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt  # Add this if your script has dependencies
+        pip install requests
 
     - name: Ensure channel_log.txt exists if required by the script
       run: |
         touch channel_log.txt  # Create the file if it doesn't exist
 
     - name: Run IPTV fetch script
-      run: python fetch_iptv_links.py  # Correct file name here
+      run: python fetch_iptv_links.py  # Run the correct script
 
     - name: Commit and push changes
       run: |
@@ -36,5 +36,7 @@ jobs:
         git add .
         git commit -m "Update IPTV links"
         git push
+      env:
+        TV_TOKEN: ${{ secrets.TV_TOKEN }}
       env:
         TV_TOKEN: ${{ secrets.TV_TOKEN }}
