@@ -82,17 +82,19 @@ def save_links(valid_links):
     existing_links = load_existing_links()  # Load existing entries to avoid duplicates
     new_links = []
 
-    # Use a set to track all unique (channel_name, link) pairs
-    all_links = existing_links.union(valid_links)
+    # Filter out the links that are already present in the existing file
+    for channel_name, link in valid_links:
+        if (channel_name, link) not in existing_links:
+            new_links.append((channel_name, link))
 
     # Only save if there are new links to add
-    if all_links != existing_links:
-        with open(OUTPUT_FILE, "w") as f:  # Write all links, old and new, to the file
-            for channel_name, link in all_links:
+    if new_links:
+        with open(OUTPUT_FILE, "a") as f:  # Append new links to the file
+            for channel_name, link in new_links:
                 f.write(f"#EXTINF:-1,{channel_name}\n{link}\n")
 
-        update_readme(valid_links)  # Update README with new links
-        print(f"Updated {OUTPUT_FILE} with {len(all_links - existing_links)} new links.")
+        update_readme(new_links)  # Update README with new links
+        print(f"Updated {OUTPUT_FILE} with {len(new_links)} new links.")
     else:
         print("No new links found to add.")
 
