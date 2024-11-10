@@ -12,6 +12,9 @@ LOG_FILE = "channel_log.txt"
 IPTV_SOURCES = [
     "https://iptv-org.github.io/iptv/index.m3u",
     "https://iptv-org.github.io/iptv/countries/pk.m3u",
+    "https://github.com/Free-TV/IPTV/blob/master/playlist.m3u8",
+    "https://gist.github.com/didarulcseiubat17/8e643cd89a2ddecb4a8c6f1233cebb5f"
+    "https://pdfcoffee.com/ipljiotvandairtel-iptv-m3u-playliststxt-4-pdf-free.html"
 ]
 
 # Regex pattern for m3u8 links
