@@ -25,7 +25,7 @@ jobs:
 
       - name: Run IPTV Link Fetch Script
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TV_TOKEN }}
         run: |
           python fetch_iptv_links.py
 
