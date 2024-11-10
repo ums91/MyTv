@@ -22,12 +22,12 @@ IPTV_SOURCES = [
     "https://gist.github.com/didarulcseiubat17/8e643cd89a2ddecb4a8c6f1233cebb5f"
 ]
 
-# Regex patterns for m3u8 links and channel names in EXTINF lines
-M3U8_PATTERN = re.compile(r"(http[s]?://[^\s]+\.m3u8)")
+# Regex patterns for .m3u/.m3u8 links and channel names in EXTINF lines
+M3U8_PATTERN = re.compile(r"(http[s]?://[^\s]+\.m3u8?)")
 EXTINF_PATTERN = re.compile(r"#EXTINF:[^\n]*,(.*)")
 
 def fetch_links(playlist_url):
-    """Fetch and extract .m3u8 links along with channel names from a playlist URL."""
+    """Fetch and extract .m3u or .m3u8 links along with channel names from a playlist URL."""
     try:
         response = requests.get(playlist_url, timeout=10)
         response.raise_for_status()
@@ -49,7 +49,7 @@ def fetch_links(playlist_url):
         return []
 
 def validate_link(channel_info):
-    """Validate .m3u8 link by checking HTTP status and return with channel name."""
+    """Validate .m3u or .m3u8 link by checking HTTP status and return with channel name."""
     channel_name, url = channel_info
     try:
         response = requests.get(url, stream=True, timeout=10)
@@ -71,6 +71,7 @@ def save_links(valid_links):
     seen_channels = set(existing_links)
     
     for channel_name, link in valid_links:
+        # Check for duplication based on link and channel name
         if link not in seen_channels:
             new_links.append((channel_name, link))
             seen_channels.add(link)
@@ -88,7 +89,6 @@ def save_links(valid_links):
         print(f"Saved {len(new_links)} new links to {OUTPUT_FILE}")
     else:
         print("No new links found to add.")
-
 
 def load_existing_links():
     """Load existing links to avoid duplicates."""
