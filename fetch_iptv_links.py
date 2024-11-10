@@ -66,21 +66,30 @@ def validate_link(channel_info):
 def save_links(valid_links):
     """Save validated links with channel names to .m3u file, avoiding duplicates."""
     existing_links = load_existing_links()
-    new_links = [(name, link) for name, link in valid_links if link not in existing_links]
+    new_links = []
+    
+    # Use a set to track channels already added in this run
+    seen_channels = set(existing_links)
+    
+    for channel_name, link in valid_links:
+        if link not in seen_channels:
+            new_links.append((channel_name, link))
+            seen_channels.add(link)
 
+    # Write new links if there are any
     if new_links:
         with open(OUTPUT_FILE, "w") as f:  # Overwrite the file with new links
             for channel_name, link in new_links:
                 f.write(f"#EXTINF:-1,{channel_name}\n{link}\n")
 
-        with open(LOG_FILE, "w") as log:  # Overwrite the log file with new links
-            log.write("\n".join(link for _, link in new_links) + "\n")
+        with open(LOG_FILE, "w") as log:  # Overwrite the log file with all seen links
+            log.write("\n".join(seen_channels) + "\n")
 
         update_readme(new_links)  # Update README with new links
-
         print(f"Saved {len(new_links)} new links to {OUTPUT_FILE}")
     else:
         print("No new links found to add.")
+
 
 def load_existing_links():
     """Load existing links to avoid duplicates."""
