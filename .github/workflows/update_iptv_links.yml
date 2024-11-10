@@ -2,8 +2,8 @@ name: Update IPTV Links
 
 on:
   schedule:
-    - cron: "0 */6 * * *"  # Runs every 6 hours
-  workflow_dispatch:        # Allows manual triggering of the workflow
+    - cron: '0 * * * *'  # Runs every hour
+  workflow_dispatch:
 
 jobs:
   update_links:
@@ -36,7 +36,5 @@ jobs:
         git add .
         git commit -m "Update IPTV links"
         git push
-      env:
-        TV_TOKEN: ${{ secrets.TV_TOKEN }}
       env:
         TV_TOKEN: ${{ secrets.TV_TOKEN }}
