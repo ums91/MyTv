@@ -81,14 +81,11 @@ https://a.jsrdn.com/broadcast/e9b4093a41/+0000/high/c.m3u8
 
 
 #EXTINF:-1 group-title="IPL ChromeCast", IPL HS (Hindi) HD
-http://live12.akt.hotstarcdn.
-net/hls/live/2003704/ipl2019/hin/15mindvrm0124april2019/master_4.m3u8
+http://live12.akt.hotstarcdn.net/hls/live/2003704/ipl2019/hin/15mindvrm0124april2019/master_4.m3u8
 #EXTINF:-1 group-title="IPL ChromeCast", IPL HS (Hindi) FHD
-http://live12.akt.hotstarcdn.
-net/hls/live/2003704/ipl2019/hin/15mindvrm0124april2019/master_5.m3u8
+http://live12.akt.hotstarcdn.net/hls/live/2003704/ipl2019/hin/15mindvrm0124april2019/master_5.m3u8
 #EXTINF:-1 group-title="IPL ChromeCast", IPL HS (English) HD
-http://live11.akt.hotstarcdn.
-net/hls/live/2003693/ipl2019/eng/15mindvrm0124april2019/master_4.m3u8
+http://live11.akt.hotstarcdn.net/hls/live/2003693/ipl2019/eng/15mindvrm0124april2019/master_4.m3u8
 #EXTINF:-1 group-title="IPL ChromeCast", IPL HS (English) FHD
 http://live11.akt.hotstarcdn.
 net/hls/live/2003693/ipl2019/eng/15mindvrm0124april2019/master_5.m3u8
