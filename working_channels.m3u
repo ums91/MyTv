@@ -77,10 +77,6 @@ https://moviesphere-roku.amagi.tv/playlist720lp.m3u8
 https://content.uplynk.com/channel/4b3fda1ff2c24556bc2c6034307d117d.m3u8
 #EXTINF:-1, Movie Kingdom
 https://a.jsrdn.com/broadcast/e9b4093a41/+0000/high/c.m3u8
-
-
-
-#EXTM3U  x-tvg-url="https://github.com/arnab8820/JioTV-epg/raw/main/epg.xml.gz"
 #EXTINF:-1 tvg-chno="144" tvg-name="Colors HD" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Colors_HD.png" tvg-language="Hindi" tvg-type="Entertainment" group-title="Entertainment" catchup="vod" catchup-source="http://127.0.0.1:3500/catchup/getm3u8/${start}/${end}/144/index.m3u8" catchup-days="7", Colors HD 
 http://127.0.0.1:3500/getm3u8/144/master.m3u8
 #EXTINF:-1 tvg-chno="167" tvg-name="Zee TV HD" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Zee_TV_HD.png" tvg-language="Hindi" tvg-type="Entertainment" group-title="Entertainment", Zee TV HD 
