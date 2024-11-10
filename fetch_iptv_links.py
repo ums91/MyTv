@@ -17,18 +17,31 @@ IPTV_SOURCES = [
     "https://pdfcoffee.com/ipljiotvandairtel-iptv-m3u-playliststxt-4-pdf-free.html"
 ]
 
-# Regex pattern for m3u8 links
+# Regex pattern for m3u8 links and channel names in EXTINF lines
 M3U8_PATTERN = re.compile(r"(http[s]?://[^\s]+\.m3u8)")
+EXTINF_PATTERN = re.compile(r"#EXTINF:[^\n]*,(.*)")
 
 # Query URL for finding new IPTV links
 SEARCH_QUERY_URL = "https://www.google.com/search?q=free+live+TV+channels+in+m3u8+format"
 
 def fetch_links(playlist_url):
-    """Fetch and extract .m3u8 links from a playlist URL."""
+    """Fetch and extract .m3u8 links along with channel names from a playlist URL."""
     try:
         response = requests.get(playlist_url, timeout=10)
         response.raise_for_status()
-        return M3U8_PATTERN.findall(response.text)
+        
+        # Extract all EXTINF tags and URLs
+        content = response.text
+        links = M3U8_PATTERN.findall(content)
+        extinf_tags = EXTINF_PATTERN.findall(content)
+        
+        # Pair each link with its channel name if available
+        channels = []
+        for i, link in enumerate(links):
+            channel_name = extinf_tags[i] if i < len(extinf_tags) else "Unknown Channel"
+            channels.append((channel_name, link))
+        
+        return channels
     except requests.RequestException as e:
         print(f"Failed to fetch from {playlist_url}: {e}")
         return []
@@ -45,13 +58,14 @@ def search_for_new_sources():
         print(f"Failed to fetch search results: {e}")
         return []
 
-def validate_link(url):
-    """Validate .m3u8 link by checking HTTP status."""
+def validate_link(channel_info):
+    """Validate .m3u8 link by checking HTTP status and return with channel name."""
+    channel_name, url = channel_info
     try:
         response = requests.get(url, stream=True, timeout=10)
         if response.status_code == 200:
-            print(f"Valid link found: {url}")
-            return url
+            print(f"Valid link found: {url} - {channel_name}")
+            return channel_name, url
         else:
             print(f"Invalid link (Status: {response.status_code}): {url}")
     except requests.RequestException as e:
@@ -67,17 +81,17 @@ def load_existing_links():
         return set()
 
 def save_links(valid_links):
-    """Save validated links to .m3u file, avoiding duplicates."""
+    """Save validated links with channel names to .m3u file, avoiding duplicates."""
     existing_links = load_existing_links()
-    new_links = [link for link in valid_links if link not in existing_links]
+    new_links = [(name, link) for name, link in valid_links if link not in existing_links]
 
     if new_links:
         with open(OUTPUT_FILE, "a") as f:
-            for link in new_links:
-                f.write(f"#EXTINF:-1,Live Channel - {datetime.now()}\n{link}\n")
+            for channel_name, link in new_links:
+                f.write(f"#EXTINF:-1,{channel_name} - {datetime.now()}\n{link}\n")
 
         with open(LOG_FILE, "a") as log:
-            log.write("\n".join(new_links) + "\n")
+            log.write("\n".join(link for _, link in new_links) + "\n")
 
         print(f"Saved {len(new_links)} new links to {OUTPUT_FILE}")
     else:
