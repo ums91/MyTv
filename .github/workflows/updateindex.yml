@@ -1,4 +1,4 @@
-name: Update IPTV Links
+name: Update name: Update IPTV Links
 
 on:
   workflow_dispatch:  # Allows manual trigger from the GitHub UI
@@ -33,35 +33,7 @@ jobs:
 
     - name: Run script to update m3u links
       run: |
-        python -c "
-import os
-
-source_file_path = 'ums91/MyTv/in.m3u'
-target_file_path = 'umsiptv/streams/index.m3u'
-
-def add_m3u_links():
-    if not os.path.exists(source_file_path):
-        print(f'Source file {source_file_path} does not exist.')
-        return
-
-    with open(source_file_path, 'r') as source_file:
-        new_links = source_file.readlines()
-
-    if os.path.exists(target_file_path):
-        with open(target_file_path, 'r') as target_file:
-            existing_links = target_file.readlines()
-    else:
-        existing_links = []
-
-    updated_links = new_links + existing_links
-
-    with open(target_file_path, 'w') as target_file:
-        target_file.writelines(updated_links)
-
-    print(f'Successfully added {len(new_links)} new links to {target_file_path}.')
-
-add_m3u_links()
-        "
+        python fetch.py
 
     - name: Commit and push changes
       run: |
