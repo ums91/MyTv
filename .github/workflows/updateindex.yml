@@ -1,6 +1,3 @@
-Here's a GitHub Actions workflow for your requirement. This workflow will pull all .m3u links from `in.m3u` in `ums91/MyTv`, add them to the top of `index.m3u` in the `streams` folder of `ums91/umsiptv` without overwriting the existing links, then commit and push the changes.
-
-```yaml
 name: Update index.m3u with New Links
 
 on:
@@ -42,11 +39,3 @@ jobs:
           git push
         env:
           TV_TOKEN: ${{ secrets.TV_TOKEN }}
-```
-
-This workflow performs the following steps:
-1. Checks out both repositories (`MyTv` and `umsiptv`).
-2. Extracts content from `in.m3u` and appends it at the top of `index.m3u`.
-3. Commits and pushes the updated `index.m3u` file back to the `umsiptv` repository.
-
-Make sure that `TV_TOKEN` has the required permissions for pushing changes to the `umsiptv` repository.
