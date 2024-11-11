@@ -1,4 +1,4 @@
-name: Update Index
+name: Update index
 
 on:
   workflow_dispatch:  # Allows manual trigger from the GitHub UI
@@ -28,12 +28,16 @@ jobs:
 
     - name: Run script to update m3u links
       run: |
-        python fetch.py
+        python fetch.py  # Assuming this script adds the content from MyTv/in.m3u to umsiptv/streams/index.m3u
+
+    - name: Stage changes for commit
+      run: |
+        git add umsiptv/streams/index.m3u
+        git status  # To verify the changes are staged
 
     - name: Commit and push changes
       run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
-        git add umsiptv/streams/index.m3u
-        git commit -m "Update IPTV links"
+        git commit -m "Update IPTV links in index.m3u"
         git push origin main
