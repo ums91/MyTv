@@ -1,64 +1,72 @@
-name: Update index.m3u with New Links
+name: Update IPTV Links
 
 on:
-  workflow_dispatch:  # Allows the workflow to be triggered manually
+  workflow_dispatch:  # Allows manual trigger from the GitHub UI
 
 jobs:
-  update-m3u:
+  update-links:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout MyTv repository
-        uses: actions/checkout@v3
-        with:
-          repository: ums91/MyTv
-          path: mytv
+    - name: Checkout ums91/MyTv repository
+      uses: actions/checkout@v3
+      with:
+        repository: ums91/MyTv
+        token: ${{ secrets.TV_TOKEN }}
 
-      - name: Checkout umsiptv repository with push permissions
-        uses: actions/checkout@v3
-        with:
-          repository: ums91/umsiptv  # Specify repository explicitly
-          path: umsiptv
-          token: ${{ secrets.TV_TOKEN }}  # Ensure correct token for push permissions
+    - name: Checkout ums91/umsiptv repository
+      uses: actions/checkout@v3
+      with:
+        repository: ums91/umsiptv
+        token: ${{ secrets.TV_TOKEN }}
+        path: umsiptv
 
-      - name: Prepend new links from in.m3u to index.m3u
-        run: |
-          # Extract content from in.m3u
-          new_content=$(cat mytv/in.m3u)
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.8'
 
-          # Ensure index.m3u exists and prepend content
-          if [ -f umsiptv/streams/index.m3u ]; then
-            echo -e "$new_content\n$(cat umsiptv/streams/index.m3u)" > umsiptv/streams/index.m3u
-          else
-            echo "$new_content" > umsiptv/streams/index.m3u
-          fi
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt  # If you have any dependencies to install
 
-      - name: Create new branch and commit changes
-        run: |
-          cd umsiptv
-          git checkout -b update-m3u-$(date +'%Y%m%d%H%M')
-          git config --local user.name "GitHub Action"
-          git config --local user.email "actions@github.com"
-          git add streams/index.m3u
-          git commit -m "Add new links from in.m3u to top of index.m3u"
-          git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
-        env:
-          GITHUB_TOKEN: ${{ secrets.TV_TOKEN }}  # Use TV_TOKEN for authentication
+    - name: Run script to update m3u links
+      run: |
+        python -c "
+import os
 
-      - name: Create Pull Request
-        id: create_pr
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.TV_TOKEN }}
-          commit-message: "Add new links from in.m3u to top of index.m3u"
-          title: "Update index.m3u with new links"
-          body: "This pull request adds new channels from in.m3u to the top of index.m3u."
-          branch: update-m3u-$(date +'%Y%m%d%H%M')
-          base: main
+source_file_path = 'ums91/MyTv/in.m3u'
+target_file_path = 'umsiptv/streams/index.m3u'
 
-      - name: Merge Pull Request
-        if: ${{ steps.create_pr.outputs.pull-request-number }}
-        run: |
-          gh pr merge ${{ steps.create_pr.outputs.pull-request-number }} --merge --admin
-        env:
-          GITHUB_TOKEN: ${{ secrets.TV_TOKEN }}
+def add_m3u_links():
+    if not os.path.exists(source_file_path):
+        print(f'Source file {source_file_path} does not exist.')
+        return
+
+    with open(source_file_path, 'r') as source_file:
+        new_links = source_file.readlines()
+
+    if os.path.exists(target_file_path):
+        with open(target_file_path, 'r') as target_file:
+            existing_links = target_file.readlines()
+    else:
+        existing_links = []
+
+    updated_links = new_links + existing_links
+
+    with open(target_file_path, 'w') as target_file:
+        target_file.writelines(updated_links)
+
+    print(f'Successfully added {len(new_links)} new links to {target_file_path}.')
+
+add_m3u_links()
+        "
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add umsiptv/streams/index.m3u
+        git commit -m "Update IPTV links"
+        git push origin main
