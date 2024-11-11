@@ -3,6 +3,7 @@ name: Update index.m3u with New Links
 on:
   schedule:
     - cron: '0 * * * *' # Runs every hour
+  workflow_dispatch:  
 
 jobs:
   update-m3u:
