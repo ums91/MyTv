@@ -6,7 +6,6 @@
   
 *This workflow will keep IPTV .m3u file automatically updated and versioned in the repo.*
 ## New Working Channels Found
-Updated on 2024-11-10 18:40:45
+Updated on 2024-11-11 00:43:23
 
-- **Paras Gold One**: [Stream Link](https://hls.tvpunjab.com/stream/deb10bae362f810630ec3abedcae5894.sdp/chunks.m3u8)
 - **ANB NEWS**: [Stream Link](https://legitpro.co.in/nimbarktv/nimbarktvbox/index.m3u8)
