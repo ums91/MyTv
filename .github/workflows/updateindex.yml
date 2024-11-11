@@ -1,9 +1,7 @@
 name: Update index.m3u with New Links
 
 on:
-  schedule:
-    - cron: '0 * * * *' # Runs every hour
-  workflow_dispatch:  
+  workflow_dispatch:  # Allows the workflow to be triggered manually
 
 jobs:
   update-m3u:
@@ -23,21 +21,45 @@ jobs:
           path: umsiptv
           token: ${{ secrets.TV_TOKEN }}  # Use TV_TOKEN to checkout with the correct permissions
 
-      - name: Append new links from in.m3u to top of index.m3u
+      - name: Prepend new links from in.m3u to index.m3u
         run: |
           # Extract content from in.m3u
           new_content=$(cat mytv/in.m3u)
-          
-          # Add content at the top of index.m3u without overwriting
-          echo -e "$new_content\n$(cat umsiptv/streams/index.m3u)" > umsiptv/streams/index.m3u
 
-      - name: Commit and push changes
+          # Ensure index.m3u exists and prepend content
+          if [ -f umsiptv/streams/index.m3u ]; then
+            echo -e "$new_content\n$(cat umsiptv/streams/index.m3u)" > umsiptv/streams/index.m3u
+          else
+            echo "$new_content" > umsiptv/streams/index.m3u
+          fi
+
+      - name: Create new branch and commit changes
         run: |
           cd umsiptv
+          git checkout -b update-m3u-$(date +'%Y%m%d%H%M')
           git config --local user.name "GitHub Action"
           git config --local user.email "actions@github.com"
           git add streams/index.m3u
           git commit -m "Add new links from in.m3u to top of index.m3u"
-          git push
+          git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
         env:
           TV_TOKEN: ${{ secrets.TV_TOKEN }}
+
+      - name: Create Pull Request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.TV_TOKEN }}
+          commit-message: "Add new links from in.m3u to top of index.m3u"
+          title: "Update index.m3u with new links"
+          body: "This pull request adds new channels from in.m3u to the top of index.m3u."
+          branch: $(git rev-parse --abbrev-ref HEAD)
+          base: main
+
+      - name: Merge Pull Request
+        if: ${{ steps.create_pr.outputs.pull-request-number }}
+        run: |
+          gh pr merge ${{ steps.create_pr.outputs.pull-request-number }} --merge --admin
+        env:
+          GITHUB_TOKEN: ${{ secrets.TV_TOKEN }}
+
