@@ -1,0 +1,52 @@
+Here's a GitHub Actions workflow for your requirement. This workflow will pull all .m3u links from `in.m3u` in `ums91/MyTv`, add them to the top of `index.m3u` in the `streams` folder of `ums91/umsiptv` without overwriting the existing links, then commit and push the changes.
+
+```yaml
+name: Update index.m3u with New Links
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Runs every hour
+
+jobs:
+  update-m3u:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout MyTv repository
+        uses: actions/checkout@v3
+        with:
+          repository: ums91/MyTv
+          path: mytv
+
+      - name: Checkout umsiptv repository
+        uses: actions/checkout@v3
+        with:
+          repository: ums91/umsiptv
+          path: umsiptv
+
+      - name: Append new links from in.m3u to top of index.m3u
+        run: |
+          # Extract content from in.m3u
+          new_content=$(cat mytv/in.m3u)
+          
+          # Add content at the top of index.m3u without overwriting
+          echo -e "$new_content\n$(cat umsiptv/streams/index.m3u)" > umsiptv/streams/index.m3u
+
+      - name: Commit and push changes
+        run: |
+          cd umsiptv
+          git config --local user.name "GitHub Action"
+          git config --local user.email "actions@github.com"
+          git add streams/index.m3u
+          git commit -m "Add new links from in.m3u to top of index.m3u"
+          git push
+        env:
+          TV_TOKEN: ${{ secrets.TV_TOKEN }}
+```
+
+This workflow performs the following steps:
+1. Checks out both repositories (`MyTv` and `umsiptv`).
+2. Extracts content from `in.m3u` and appends it at the top of `index.m3u`.
+3. Commits and pushes the updated `index.m3u` file back to the `umsiptv` repository.
+
+Make sure that `TV_TOKEN` has the required permissions for pushing changes to the `umsiptv` repository.
