@@ -1,4 +1,4 @@
-name: Update name: Update IPTV Links
+name: Update IPTV Links
 
 on:
   workflow_dispatch:  # Allows manual trigger from the GitHub UI
