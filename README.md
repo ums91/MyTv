@@ -6,7 +6,7 @@
   
 *This workflow will keep IPTV .m3u file automatically updated and versioned in the repo.*
 ## New Working Channels Found
-Updated on 2024-11-11 14:45:23
+Updated on 2024-11-13 00:42:35
 
 - **SONY TEN 4 HD{SONYLIV}**: [Stream Link](https://d2q8p4pe5spbak.cloudfront.net/bpk-tv/9XM/9XM.isml/index.m3u8)
 - **SONY SIX HD{SONYLIV}**: [Stream Link](https://feeds.intoday.in/aajtak/api/aajtakhd/master.m3u8)
@@ -20,15 +20,12 @@ Updated on 2024-11-11 14:45:23
 - **Sansad TV (1080p) [Not 24/7]**: [Stream Link](https://d34z4embz0hjf6.cloudfront.net/out/v1/7ac2789ff9a544a49337d1ffc54ce61c/index.m3u8)
 - **Sanskar TV (1080p)**: [Stream Link](https://d2netiedy8cz3x.cloudfront.net/out/v1/9bf6fa4ac8d6432cb98da13b121ba3c2/index.m3u8)
 - **Sanskar UK (1080p)**: [Stream Link](https://deatfcv3xdvi3.cloudfront.net/out/v1/7a43dd2f64e34ec28da1b4bd6923251a/index.m3u8)
-- **Sanskar USA (1080p)**: [Stream Link](https://ythls.armelin.one/channel/UC2ziCMHFPWkFHjocUMXT__Q.m3u8)
 - **Sanskar Web TV (1080p)**: [Stream Link](https://d2vfwvjxwtwq1t.cloudfront.net/out/v1/6b24239d5517495b986e7705490c6e65/index.m3u8)
 - **Sathiyam TV (1080p) [Not 24/7]**: [Stream Link](https://d1ji7e9jbzm5g8.cloudfront.net/out/v1/769f22f64d80442889306b9c4abea63c/index.m3u8)
 - **Shekinah TV (1080p)**: [Stream Link](https://live.argusnews.in/hls/argustv.m3u8)
-- **Shemaroo Marathi Bana (720p)**: [Stream Link](https://ythls.armelin.one/channel/UCCQmi1Bd-_tHRm6M2uPlGUA.m3u8)
 - **Bharat 24 (1080p) [Not 24/7]**: [Stream Link](https://idvd.multitvsolution.com/idvo/bharatsamachar.m3u8)
 - **STV Haryana News (720p) [Not 24/7]**: [Stream Link](https://live.wmncdn.net/desichannel/7e2dd0aed46b70a5c77f4affdb702e4b.sdp/playlist.m3u8)
 - **Bharat Samachar TV (360p)**: [Stream Link](https://d32gxr3r1ksq2p.cloudfront.net/master.m3u8)
-- **Desi Channel (720p)**: [Stream Link](https://ythls.armelin.one/channel/UCQC1wGbOOIoC23fRGxt4kbg.m3u8)
 - **Nick Jr India (1080p)**: [Stream Link](https://travelxp-travelxp-3-nl.samsung.wurl.tv/playlist.m3u8)
 - **PTC Dhol (720p)**: [Stream Link](https://ythls.armelin.one/channel/UCQLEbraENUGWh6p1Rv664rQ.m3u8)
 - **Sony Sports Ten 1 (1080p)**: [Stream Link](https://pl-indiatvnews.akamaized.net/out/v1/db79179b608641ceaa5a4d0dd0dca8da/index.m3u8)
@@ -43,6 +40,8 @@ Updated on 2024-11-11 14:45:23
 - **NDTV India**: [Stream Link](https://abplivetv.akamaized.net/hls/live/2043010/hindi/master.m3u8)
 - **NDTV India 480p**: [Stream Link](https://stream.sen-gt.com/A2itv/myStream/chunklist_w1124459956.m3u8)
 - **ABP News**: [Stream Link](https://stream.sen-gt.com/A2itv/myStream/chunklist_w1124459956.m3u8)
+- **JioCinema Cricket 1**: [Stream Link](https://stream.sen-gt.com/A2iMusic/myStream/chunklist_w652109108.m3u8)
+- **Star Sports 1 HD 1**: [Stream Link](https://stream.sen-gt.com/A2iReligion/myStream/chunklist_w672043691.m3u8)
 - **Star Sports Select 1 HD 2**: [Stream Link](https://biptv.tv/live/biptvstream_orig/index.m3u8)
 - **Sky Sports Cricket 2**: [Stream Link](http://live.creacast.com/d5tv/smil:d5tv.smil/playlist.m3u8)
 - **Sky Sports Football**: [Stream Link](http://fash1043.cloudycdn.services/slive/_definst_/ftv_paris_adaptive.smil/chunklist.m3u8)
