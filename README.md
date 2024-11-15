@@ -6,15 +6,14 @@
   
 *This workflow will keep IPTV .m3u file automatically updated and versioned in the repo.*
 ## New Working Channels Found
-Updated on 2024-11-13 00:42:35
+Updated on 2024-11-15 00:45:10
 
 - **SONY TEN 4 HD{SONYLIV}**: [Stream Link](https://d2q8p4pe5spbak.cloudfront.net/bpk-tv/9XM/9XM.isml/index.m3u8)
 - **SONY SIX HD{SONYLIV}**: [Stream Link](https://feeds.intoday.in/aajtak/api/aajtakhd/master.m3u8)
 - **Aaj Tak**: [Stream Link](https://aasthaott.akamaized.net/110923/smil:bhajan.smil/chunklist_b264000.m3u8)
-- **Aastha (480p)**: [Stream Link](https://ythls.armelin.one/channel/UClOK2dPmq8k8Xwii_4TjRnQ.m3u8)
+- **Aastha Bhajan (480p)**: [Stream Link](https://ythls.armelin.one/channel/UCP_wvXToU5ohFLbTAkatvsw.m3u8)
 - **Agamvani Channel (1080p) [Not 24/7]**: [Stream Link](https://dr1zhpsuem5f4.cloudfront.net/master.m3u8)
 - **Angel TV India (720p)**: [Stream Link](https://plus.gigabitcdn.net/live-stream/apna-punjab-H3sE/playlist.m3u8)
-- **Anjan (720p) [Not 24/7]**: [Stream Link](https://ythls.armelin.one/channel/UCMnz0yLX3afzFc8y822YO5g.m3u8)
 - **Apna Punjab TV (720p)**: [Stream Link](https://hls.media.nic.in/hls/live/lstv/lstv.m3u8)
 - **Aradana TV (1080p) [Not 24/7]**: [Stream Link](https://d26idhjf0y1p2g.cloudfront.net/out/v1/cd66dd25b9774cb29943bab54bbf3e2f/index.m3u8)
 - **Sansad TV (1080p) [Not 24/7]**: [Stream Link](https://d34z4embz0hjf6.cloudfront.net/out/v1/7ac2789ff9a544a49337d1ffc54ce61c/index.m3u8)
@@ -27,7 +26,6 @@ Updated on 2024-11-13 00:42:35
 - **STV Haryana News (720p) [Not 24/7]**: [Stream Link](https://live.wmncdn.net/desichannel/7e2dd0aed46b70a5c77f4affdb702e4b.sdp/playlist.m3u8)
 - **Bharat Samachar TV (360p)**: [Stream Link](https://d32gxr3r1ksq2p.cloudfront.net/master.m3u8)
 - **Nick Jr India (1080p)**: [Stream Link](https://travelxp-travelxp-3-nl.samsung.wurl.tv/playlist.m3u8)
-- **PTC Dhol (720p)**: [Stream Link](https://ythls.armelin.one/channel/UCQLEbraENUGWh6p1Rv664rQ.m3u8)
 - **Sony Sports Ten 1 (1080p)**: [Stream Link](https://pl-indiatvnews.akamaized.net/out/v1/db79179b608641ceaa5a4d0dd0dca8da/index.m3u8)
 - **News 18 India**: [Stream Link](https://pl-indiatvnews.akamaized.net/out/v1/db79179b608641ceaa5a4d0dd0dca8da/index_3.m3u8)
 - **India TV**: [Stream Link](https://feeds.intoday.in/aajtak/api/master.m3u8)
