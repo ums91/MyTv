@@ -12,12 +12,16 @@ README_FILE = "README.md"
 
 # Initial list of public IPTV playlist URLs
 IPTV_SOURCES = [
-    "https://github.com/iptv-org/iptv/blob/master/streams/pk.m3u",
-    "https://github.com/iptv-org/iptv/blob/master/streams/qa.m3u",
-    "https://github.com/iptv-org/iptv/blob/master/streams/sa.m3u",
-    "https://github.com/iptv-org/iptv/blob/master/streams/in.m3u",
-    "https://github.com/iptv-org/iptv/blob/master/streams/in_samsung.m3u",
-    "https://github.com/iptv-org/iptv/blob/master/streams/ae.m3u",
+    "https://iptv-org.github.io/iptv/countries/pk.m3u",
+    "https://iptv-org.github.io/iptv/countries/om.m3u",
+    "https://iptv-org.github.io/iptv/countries/qa.m3u",
+    "https://iptv-org.github.io/iptv/countries/sa.m3u",
+    "https://iptv-org.github.io/iptv/countries/lb.m3u",
+    "https://iptv-org.github.io/iptv/countries/eg.m3u",
+    "https://iptv-org.github.io/iptv/countries/in.m3u",
+    "https://iptv-org.github.io/iptv/countries/bh.m3u",
+    "https://raw.githubusercontent.com/iptv-org/iptv/refs/heads/master/streams/in_samsung.m3u",
+    "https://iptv-org.github.io/iptv/countries/ae.m3u",
     "https://gist.githubusercontent.com/Shah12345678890/8b230a9ef007d5c17b96e54a0f8685e9/raw/allChannelPlaylist.m3u",
     "https://paste.sgpedia.com/paste.php?id=125",
     "https://paste.sgpedia.com/paste.php?id=128",
