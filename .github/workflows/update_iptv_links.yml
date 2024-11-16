@@ -29,8 +29,9 @@ jobs:
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
-        git add working_channels.m3u README.md
+        git add working_channels.m3u README.md channel_log.txt  # Make sure all modified files are staged
         git commit -m "Update IPTV channels and README"
         git push origin main
       env:
         GITHUB_TOKEN: ${{ secrets.TV_TOKEN }}
+
