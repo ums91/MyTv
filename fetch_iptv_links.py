@@ -137,15 +137,15 @@ def main():
     # Step 2: Fetch and validate links
     all_links = []
     for source in all_sources:
-        all_links.extend(fetch_links(source))
+        all_links.extend(fetch_links(source))  # Try fetching links
 
     # Step 3: Use multithreading to validate links faster
     with ThreadPoolExecutor(max_workers=10) as executor:
-        valid_links = set(filter(None, executor.map(validate_link, all_links)))
+        valid_links = list(filter(None, executor.map(validate_link, all_links)))
 
-    # Step 4: Save new links and sync OUTPUT_FILE
+    # Step 4: Save only new, unique links
     save_links(valid_links)
-    sync_output_file(load_tracked_links())
+
 
 if __name__ == "__main__":
     main()
