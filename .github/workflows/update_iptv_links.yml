@@ -1,47 +1,41 @@
-name: IPTV Channel Validation
+name: Update IPTV Working Channels
 
 on:
   schedule:
-    - cron: "0 * * * *"  # Run every hour
-  workflow_dispatch:  # Manual trigger
+    - cron: '0 * * * *'  # Run every hour
+  workflow_dispatch:  # Trigger manually if needed
 
 jobs:
-  validate_channels:
+  update_channels:
     runs-on: ubuntu-latest
+
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      # Step 2: Set up Python
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.8'
+    - name: Set up Python environment
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
 
-      # Step 3: Install dependencies
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests
+    - name: Install dependencies
+      run: |
+        pip install requests
 
-      # Step 4: Fetch IPTV links and validate them
-      - name: Run IPTV Script
-        run: |
-          python fetch_iptv_links.py
+    - name: Run IPTV fetch and validate script
+      run: |
+        python fetch_iptv_links.py
 
-      # Step 5: Check for changes and commit updates to the log file
-      - name: Check for changes
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add channel_log.txt
-          git status
+    - name: Commit and push updates to working_channels.m3u and README.md
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@users.noreply.github.com"
+        
+        # Add changes to git and commit
+        git add working_channels.m3u README.md
+        git commit -m "Update working channels and README"
+        git push
 
-      # Step 6: Commit and push changes if there are any
-      - name: Commit and push changes
-        run: |
-          git commit -m "Update channel_log.txt with new data" || echo "No changes to commit"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.TV_TOKEN }}  # Use your GitHub token secret for authentication
+    - name: Clean up
+      run: |
+        rm -f channel_log.txt
