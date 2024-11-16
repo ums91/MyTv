@@ -1,28 +1,29 @@
-name: Update IPTV Working Channels
+name: Update IPTV Playlist
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Run every hour
-  workflow_dispatch:  # Trigger manually if needed
+    - cron: "0 * * * *"  # Runs every hour
+  workflow_dispatch:
 
 jobs:
-  update_channels:
+  update-playlist:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up Python environment
-      uses: actions/setup-python@v4
+    - name: Set up Python
+      uses: actions/setup-python@v3
       with:
-        python-version: '3.10'
+        python-version: '3.8'
 
     - name: Install dependencies
       run: |
+        python -m pip install --upgrade pip
         pip install requests
 
-    - name: Run IPTV fetch and validate script
+    - name: Run IPTV script
       run: |
         python fetch_iptv_links.py
 
@@ -31,11 +32,11 @@ jobs:
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@users.noreply.github.com"
         
-        # Add changes to git and commit
+        # Add changes to git but exclude channel_log.txt (if you don't want to commit it)
         git add working_channels.m3u README.md
-        git commit -m "Update working channels and README"
+        
+        # Check if there are changes to commit
+        git diff --cached --quiet || git commit -m "Update working channels and README"
+        
+        # Push the changes
         git push
-
-    - name: Clean up
-      run: |
-        rm -f channel_log.txt
