@@ -27,27 +27,26 @@ IPTV_SOURCES = [
 M3U8_PATTERN = re.compile(r"(http[s]?://[^\s]+\.m3u8?)")
 EXTINF_PATTERN = re.compile(r"#EXTINF:[^\n]*,(.*)")
 
-def fetch_links(playlist_url):
-    """Fetch and extract .m3u or .m3u8 links along with channel names from a playlist URL."""
-    try:
-        response = requests.get(playlist_url, timeout=10)
-        response.raise_for_status()
-        
-        # Extract all EXTINF tags and URLs
-        content = response.text
-        links = M3U8_PATTERN.findall(content)
-        extinf_tags = EXTINF_PATTERN.findall(content)
-        
-        # Pair each link with its channel name if available
-        channels = []
-        for i, link in enumerate(links):
-            channel_name = extinf_tags[i] if i < len(extinf_tags) else "Unknown Channel"
-            channels.append((channel_name, link))
-        
-        return channels
-    except requests.RequestException as e:
-        print(f"Failed to fetch from {playlist_url}: {e}")
-        return []
+def fetch_links(playlist_url, retries=3):
+    """Fetch and extract .m3u or .m3u8 links with retry mechanism."""
+    for attempt in range(retries):
+        try:
+            response = requests.get(playlist_url, timeout=10)
+            response.raise_for_status()
+            # Extract all EXTINF tags and URLs
+            content = response.text
+            links = M3U8_PATTERN.findall(content)
+            extinf_tags = EXTINF_PATTERN.findall(content)
+            channels = [
+                (extinf_tags[i] if i < len(extinf_tags) else "Unknown Channel", link)
+                for i, link in enumerate(links)
+            ]
+            return channels
+        except requests.RequestException as e:
+            print(f"Error fetching {playlist_url} (Attempt {attempt + 1}): {e}")
+    print(f"Failed to fetch {playlist_url} after {retries} attempts.")
+    return []
+
 
 def validate_link(channel_info):
     """Validate .m3u or .m3u8 link by attempting to play it for 10 seconds."""
@@ -84,20 +83,29 @@ def load_existing_links(file_path):
     return existing_links
 
 def save_links(valid_links):
-    """Save validated links to OUTPUT_FILE and update the tracking file."""
-    tracked_links = load_tracked_links()
-    new_links = valid_links - tracked_links
+    """Save validated links with channel names to .m3u file, avoiding duplicates and ensuring manually deleted links are restored."""
+    existing_links = load_existing_links()  # Load existing entries to avoid duplicates
+    new_links = []
+
+    # Ensure manually deleted links are restored
+    all_links = set(existing_links)
+    for channel_name, link in valid_links:
+        all_links.add((channel_name, link))
+
+    # Save all tracked links back to the file
+    with open(OUTPUT_FILE, "w") as f:  # Overwrite the file with the complete list
+        for channel_name, link in all_links:
+            f.write(f"#EXTINF:-1,{channel_name}\n{link}\n")
+
+    # Identify newly added links
+    new_links = [link for link in valid_links if link not in existing_links]
 
     if new_links:
-        with open(OUTPUT_FILE, "a") as f:
-            for channel_name, link in new_links:
-                f.write(f"#EXTINF:-1,{channel_name}\n{link}\n")
-
-        tracked_links.update(new_links)
-        save_tracked_links(tracked_links)  # Update the tracking file
-        print(f"Added {len(new_links)} new links to {OUTPUT_FILE}.")
+        update_readme(new_links)  # Update README with new links
+        print(f"Updated {OUTPUT_FILE} with {len(new_links)} new links.")
     else:
-        print("No new links to add.")
+        print("No new links found to add.")
+
 
 def update_readme(new_links):
     """Update README.md with newly found working channels."""
