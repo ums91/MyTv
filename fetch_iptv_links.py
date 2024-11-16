@@ -54,7 +54,7 @@ def validate_link(channel_info):
     channel_name, url = channel_info
     try:
         response = requests.get(url, stream=True, timeout=10)
-        if response.status_code == 200:
+        if response.status_code == 200 and response.headers.get("content-type", "").startswith("video"):
             print(f"Valid link found: {url} - {channel_name}")
             return channel_name, url
         else:
