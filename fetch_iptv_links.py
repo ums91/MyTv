@@ -68,49 +68,43 @@ def validate_link(channel_info):
         print(f"Connection error for link {url}: {e}")
     return None
 
-def load_existing_links():
-    """Load existing links from OUTPUT_FILE to avoid duplicates."""
+def load_existing_links(file_path):
+    """Load existing links from a given file."""
     existing_links = set()
     try:
-        with open(OUTPUT_FILE, "r") as f:
-            content = f.readlines()
-            for i in range(0, len(content), 2):  # Read EXTINF and link pairs
-                if i + 1 < len(content):
-                    channel_name = content[i].strip()
-                    link = content[i + 1].strip()
+        with open(file_path, "r") as f:
+            lines = f.readlines()
+            for i in range(0, len(lines), 2):
+                if i + 1 < len(lines):
+                    channel_name = lines[i].strip()[len("#EXTINF:-1,"):]
+                    link = lines[i + 1].strip()
                     existing_links.add((channel_name, link))
     except FileNotFoundError:
         pass
     return existing_links
 
 def save_links(valid_links):
-    """Save validated links with channel names to .m3u file, avoiding duplicates."""
-    existing_links = load_existing_links()  # Load existing entries to avoid duplicates
-    new_links = []
+    """Save validated links to OUTPUT_FILE and update the tracking file."""
+    tracked_links = load_tracked_links()
+    new_links = valid_links - tracked_links
 
-    # Filter out the links that are already present in the existing file
-    for channel_name, link in valid_links:
-        if (channel_name, link) not in existing_links:
-            new_links.append((channel_name, link))
-
-    # Only save if there are new links to add
     if new_links:
-        with open(OUTPUT_FILE, "a") as f:  # Append new links to the file
+        with open(OUTPUT_FILE, "a") as f:
             for channel_name, link in new_links:
                 f.write(f"#EXTINF:-1,{channel_name}\n{link}\n")
 
-        update_readme(new_links)  # Update README with new links
-        print(f"Updated {OUTPUT_FILE} with {len(new_links)} new links.")
+        tracked_links.update(new_links)
+        save_tracked_links(tracked_links)  # Update the tracking file
+        print(f"Added {len(new_links)} new links to {OUTPUT_FILE}.")
     else:
-        print("No new links found to add.")
+        print("No new links to add.")
 
 def update_readme(new_links):
-    """Update README.md with newly found working channels, replacing previous entries."""
+    """Update README.md with newly found working channels."""
     try:
         with open(README_FILE, "r") as readme:
             lines = readme.readlines()
 
-        # Find the "## New Working Channels Found" section in README and replace it
         start_idx = next((i for i, line in enumerate(lines) if "## New Working Channels Found" in line), None)
         end_idx = next((i for i in range(start_idx + 1, len(lines)) if lines[i].startswith("## ")), len(lines)) if start_idx is not None else None
 
@@ -124,8 +118,7 @@ def update_readme(new_links):
 
         with open(README_FILE, "w") as readme:
             readme.writelines(lines)
-
-        print("README.md updated with new channels.")
+        print("README.md updated.")
     except IOError as e:
         print(f"Error updating README.md: {e}")
 
@@ -140,10 +133,11 @@ def main():
 
     # Step 3: Use multithreading to validate links faster
     with ThreadPoolExecutor(max_workers=10) as executor:
-        valid_links = list(filter(None, executor.map(validate_link, all_links)))
+        valid_links = set(filter(None, executor.map(validate_link, all_links)))
 
-    # Step 4: Save only new, unique links
+    # Step 4: Save new links and sync OUTPUT_FILE
     save_links(valid_links)
+    sync_output_file(load_tracked_links())
 
 if __name__ == "__main__":
     main()
