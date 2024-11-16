@@ -1,98 +1,36 @@
-name: Fetch IPTV Channels and Update Playlist
+name: Update IPTV Links
 
 on:
-  schedule:
-    # Runs every hour
-    - cron: '0 * * * *'
-  workflow_dispatch:
-    # Allows manual triggering of the workflow
-    inputs:
-      run-once:
-        description: 'Run the fetch operation'
-        required: false
-        default: 'false'
+  workflow_dispatch:  # Allows manual trigger of the workflow
 
 jobs:
-  fetch-iptv-links:
+  update-iptv-links:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v2
-        
-      - name: Set up Python environment
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Set up Python environment
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'  # Use the appropriate version
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
 
-      - name: Fetch IPTV channels and update files
-        env:
-          OUTPUT_FILE: working_channels.m3u
-          README_FILE: README.md
-        run: |
-          # Copy your script to a file, for example fetch_iptv_links.py
-          echo "
-import requests
-import re
-import time
-import logging
-from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime
+    - name: Run the IPTV update script
+      run: |
+        python fetch_iptv_links.py
 
-# File to save working channels and keep track of duplicates
-OUTPUT_FILE = 'working_channels.m3u'
-LOG_FILE = 'channel_log.txt'
-README_FILE = 'README.md'
-
-# Initial list of public IPTV playlist URLs
-IPTV_SOURCES = [
-    'https://raw.githubusercontent.com/iptv-org/iptv/refs/heads/master/streams/pk.m3u',
-    'https://iptv-org.github.io/iptv/countries/om.m3u',
-    'https://iptv-org.github.io/iptv/countries/qa.m3u',
-    'https://iptv-org.github.io/iptv/countries/sa.m3u',
-    'https://iptv-org.github.io/iptv/countries/lb.m3u',
-    'https://iptv-org.github.io/iptv/countries/eg.m3u',
-    'https://iptv-org.github.io/iptv/countries/in.m3u',
-    'https://iptv-org.github.io/iptv/countries/bh.m3u',
-    'https://raw.githubusercontent.com/iptv-org/iptv/refs/heads/master/streams/in_samsung.m3u',
-    'https://iptv-org.github.io/iptv/countries/ae.m3u',
-    'https://gist.githubusercontent.com/Shah12345678890/8b230a9ef007d5c17b96e54a0f8685e9/raw/allChannelPlaylist.m3u',
-    'https://paste.sgpedia.com/paste.php?id=125',
-    'https://paste.sgpedia.com/paste.php?id=128',
-    'https://gist.github.com/didarulcseiubat17/8e643cd89a2ddecb4a8c6f1233cebb5f',
-    'https://raw.githubusercontent.com/imdhiru/bloginstall-iptv/main/bloginstall-iptv.m3u'
-]
-
-M3U8_PATTERN = re.compile(r'(http[s]?://[^\s]+\.m3u8?)')
-EXTINF_PATTERN = re.compile(r'#EXTINF:[^\n]*,(.*)')
-
-logging.basicConfig(filename=LOG_FILE, level=logging.WARNING)
-
-def fetch_links(playlist_url, retries=5, backoff_factor=2):
-    for attempt in range(retries):
-        try:
-            response = requests.get(playlist_url, timeout=15)
-            response.raise_for_status()
-            content = response.text
-            links = M3U8_PATTERN.findall(content)
-            extinf_tags = EXTINF_PATTERN.findall(content)
-            channels = [(extinf_tags[i] if i < len(extinf_tags) else 'Unknown Channel', link) for i, link in enumerate(links)]
-            return channels
-        except requests.RequestException as e:
-            logging.warning(f'Failed to fetch {playlist_url}: {e}')
-            if attempt < retries - 1:
-                sleep_time = backoff_factor ** attempt
-                time.sleep(sleep_time)
-    return []
-
-def validate_link(channel_info):
-    channel_name, url = channel_info
-    try:
-        with requests.get(url, stream=True, timeout=10) as response:
-            if response.status_code == 200 and response.headers.get("content-type", "").startswith("video"):
-                start_time = time.time()
-                for chunk in response.iter_content(chu
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add working_channels.m3u README.md
+        git commit -m "Update IPTV channels and README"
+        git push origin main
+      env:
+        GITHUB_TOKEN: ${{ secrets.TV_TOKEN }}
