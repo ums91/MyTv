@@ -1,42 +1,47 @@
-name: Update IPTV Links
+name: Validate and Update IPTV Playlist
 
 on:
   schedule:
-    - cron: '0 0 */2 * *'  # Runs every 2 days at midnight
-  workflow_dispatch:  # Allow manual trigger
+    # This will run the workflow every hour
+    - cron: '0 * * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions UI
+  push:
+    branches:
+      - main # Run on changes to the main branch
 
 jobs:
-  update-iptv-links:
+  validate_and_update:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout the repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
-    - name: Set up Python environment
-      uses: actions/setup-python@v3
+    - name: Set up Python
+      uses: actions/setup-python@v2
       with:
-        python-version: '3.x'
+        python-version: '3.8'  # Adjust based on your Python version
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests
+        pip install -r requirements.txt  # Ensure you have a requirements.txt file for dependencies
 
-    - name: Fetch and update IPTV links
-      run: |
-        python fetch_iptv_links.py  # Run your script to fetch and update the IPTV links
-
-    - name: Commit and push changes
-      run: |
-        git config --global user.email "omargoroo91@gmail.com"
-        git config --global user.name "GitHub Actions"
-        git add .
-        if ! git diff-index --quiet HEAD --; then
-          git commit -m "Update IPTV links on $(date)"
-          git push origin main
-        else
-          echo "No changes to commit"
-        fi
+    - name: Run IPTV Link Validation and Update Script
       env:
-        GITHUB_TOKEN: ${{ secrets.TV_TOKEN }}  # Use the TV_TOKEN secret for authentication
+        OUTPUT_FILE: ${{ secrets.OUTPUT_FILE }}  # If you use secrets for any sensitive data
+        LOG_FILE: ${{ secrets.LOG_FILE }}  # If you use secrets for logging
+        README_FILE: ${{ secrets.README_FILE }}  # If you use secrets for README updates
+      run: |
+        python fetch_iptv_links.py  # Replace with the correct command to run your script
+
+    - name: Commit and Push Changes (if any)
+      env:
+        GITHUB_TOKEN: ${{ secrets.TV_TOKEN }}  # Use the GitHub token stored as a secret
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@users.noreply.github.com"
+        
+        git add working_channels.m3u README.md
+        git commit -m "Updated working IPTV channels"
+        git push https://x-access-token:${{ secrets.TV_TOKEN }}@github.com/${{ github.repository }} HEAD:main
