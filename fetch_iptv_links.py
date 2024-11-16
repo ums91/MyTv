@@ -50,15 +50,20 @@ def fetch_links(playlist_url):
         return []
 
 def validate_link(channel_info):
-    """Validate .m3u or .m3u8 link by checking HTTP status and return with channel name."""
+    """Validate .m3u or .m3u8 link by attempting to play it for 10 seconds."""
     channel_name, url = channel_info
     try:
-        response = requests.get(url, stream=True, timeout=10)
-        if response.status_code == 200 and response.headers.get("content-type", "").startswith("video"):
-            print(f"Valid link found: {url} - {channel_name}")
-            return channel_name, url
-        else:
-            print(f"Invalid link (Status: {response.status_code}): {url}")
+        with requests.get(url, stream=True, timeout=10) as response:
+            if response.status_code == 200 and response.headers.get("content-type", "").startswith("video"):
+                print(f"Testing link for playback: {url} - {channel_name}")
+                start_time = time.time()
+                for chunk in response.iter_content(chunk_size=1024):
+                    if time.time() - start_time >= 10:  # Check if the link plays for 10 seconds
+                        print(f"Valid link confirmed: {url} - {channel_name}")
+                        return channel_name, url
+                print(f"Link did not sustain playback for 10 seconds: {url}")
+            else:
+                print(f"Invalid link (Status: {response.status_code}): {url}")
     except requests.RequestException as e:
         print(f"Connection error for link {url}: {e}")
     return None
