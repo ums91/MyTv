@@ -12,7 +12,7 @@ README_FILE = "README.md"
 
 # Initial list of public IPTV playlist URLs
 IPTV_SOURCES = [
-    "https://iptv-org.github.io/iptv/countries/pk.m3u",
+    "https://raw.githubusercontent.com/iptv-org/iptv/refs/heads/master/streams/pk.m3u",
     "https://iptv-org.github.io/iptv/countries/om.m3u",
     "https://iptv-org.github.io/iptv/countries/qa.m3u",
     "https://iptv-org.github.io/iptv/countries/sa.m3u",
