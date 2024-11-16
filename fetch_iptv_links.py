@@ -2,7 +2,6 @@ import requests
 import re
 import time
 import logging
-from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
 # File to save working channels and keep track of duplicates
@@ -21,12 +20,7 @@ IPTV_SOURCES = [
     "https://iptv-org.github.io/iptv/countries/in.m3u",
     "https://iptv-org.github.io/iptv/countries/bh.m3u",
     "https://raw.githubusercontent.com/iptv-org/iptv/refs/heads/master/streams/in_samsung.m3u",
-    "https://iptv-org.github.io/iptv/countries/ae.m3u",
-    #"https://gist.githubusercontent.com/Shah12345678890/8b230a9ef007d5c17b96e54a0f8685e9/raw/allChannelPlaylist.m3u",
-    #"https://paste.sgpedia.com/paste.php?id=125",
-    #"https://paste.sgpedia.com/paste.php?id=128",
-    #"https://gist.github.com/didarulcseiubat17/8e643cd89a2ddecb4a8c6f1233cebb5f",
-    #"https://raw.githubusercontent.com/imdhiru/bloginstall-iptv/main/bloginstall-iptv.m3u"
+    "https://iptv-org.github.io/iptv/countries/ae.m3u"
 ]
 
 # Regex patterns for .m3u/.m3u8 links and channel names in EXTINF lines
@@ -63,27 +57,6 @@ def fetch_links(playlist_url, retries=5, backoff_factor=2):
                 time.sleep(sleep_time)
     print(f"Failed to fetch {playlist_url} after {retries} attempts.")
     return []  # Return an empty list if all attempts fail
-
-def validate_link(channel_info):
-    """Validate .m3u or .m3u8 link by attempting to play it for 10 seconds."""
-    channel_name, url = channel_info
-    try:
-        with requests.get(url, stream=True, timeout=10) as response:
-            if response.status_code == 200 and response.headers.get("content-type", "").startswith("video"):
-                print(f"Testing link for playback: {url} - {channel_name}")  # Debug print
-                start_time = time.time()
-                for chunk in response.iter_content(chunk_size=1024):
-                    if time.time() - start_time >= 10:  # Check if the link plays for 10 seconds
-                        print(f"Valid link confirmed: {url} - {channel_name}")  # Debug print
-                        return channel_name, url
-                print(f"Link did not sustain playback for 10 seconds: {url}")  # Debug print
-            else:
-                print(f"Invalid link (Status: {response.status_code}): {url}")  # Debug print
-    except requests.RequestException as e:
-        print(f"Connection error for link {url}: {e}")
-        # Log the failure to a file for future reference
-        logging.warning(f"Failed to validate {url}: {e}")
-    return None
 
 def load_existing_links(file_path):
     """Load existing links from a given file."""
@@ -151,17 +124,13 @@ def main():
     # Step 1: Load initial and new sources
     all_sources = set(IPTV_SOURCES)
 
-    # Step 2: Fetch and validate links
+    # Step 2: Fetch and save links
     all_links = []
     for source in all_sources:
-        all_links.extend(fetch_links(source))  # Try fetching links
+        all_links.extend(fetch_links(source))  # Fetch links
 
-    # Step 3: Use multithreading to validate links faster
-    with ThreadPoolExecutor(max_workers=10) as executor:
-        valid_links = list(filter(None, executor.map(validate_link, all_links)))
-
-    # Step 4: Save all fetched links
-    save_links(valid_links)
+    # Step 3: Save all fetched links directly
+    save_links(all_links)
 
 if __name__ == "__main__":
     main()
