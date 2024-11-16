@@ -37,5 +37,6 @@ jobs:
           git push origin main
         else
           echo "No changes to commit"
+        fi
       env:
         GITHUB_TOKEN: ${{ secrets.TV_TOKEN }}  # Use the TV_TOKEN secret for authentication
