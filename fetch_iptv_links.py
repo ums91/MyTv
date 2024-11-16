@@ -50,6 +50,7 @@ def fetch_links(playlist_url, retries=5, backoff_factor=2):
                 (extinf_tags[i] if i < len(extinf_tags) else "Unknown Channel", link)
                 for i, link in enumerate(links)
             ]
+            print(f"Fetched {len(channels)} channels from {playlist_url}")  # Debug print
             return channels
         except requests.RequestException as e:
             print(f"Error fetching {playlist_url} (Attempt {attempt + 1}): {e}")
@@ -69,15 +70,15 @@ def validate_link(channel_info):
     try:
         with requests.get(url, stream=True, timeout=10) as response:
             if response.status_code == 200 and response.headers.get("content-type", "").startswith("video"):
-                print(f"Testing link for playback: {url} - {channel_name}")
+                print(f"Testing link for playback: {url} - {channel_name}")  # Debug print
                 start_time = time.time()
                 for chunk in response.iter_content(chunk_size=1024):
                     if time.time() - start_time >= 10:  # Check if the link plays for 10 seconds
-                        print(f"Valid link confirmed: {url} - {channel_name}")
+                        print(f"Valid link confirmed: {url} - {channel_name}")  # Debug print
                         return channel_name, url
-                print(f"Link did not sustain playback for 10 seconds: {url}")
+                print(f"Link did not sustain playback for 10 seconds: {url}")  # Debug print
             else:
-                print(f"Invalid link (Status: {response.status_code}): {url}")
+                print(f"Invalid link (Status: {response.status_code}): {url}")  # Debug print
     except requests.RequestException as e:
         print(f"Connection error for link {url}: {e}")
         # Log the failure to a file for future reference
@@ -119,9 +120,9 @@ def save_links(valid_links):
 
     if new_links:
         update_readme(new_links)  # Update README with new links
-        print(f"Updated {OUTPUT_FILE} with {len(new_links)} new links.")
+        print(f"Updated {OUTPUT_FILE} with {len(new_links)} new links.")  # Debug print
     else:
-        print("No new links found to add.")
+        print("No new links found to add.")  # Debug print
 
 def update_readme(new_links):
     """Update README.md with newly found working channels."""
