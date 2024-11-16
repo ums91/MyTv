@@ -1,5 +1,7 @@
 import requests
 import re
+import time
+import logging
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
@@ -27,11 +29,14 @@ IPTV_SOURCES = [
 M3U8_PATTERN = re.compile(r"(http[s]?://[^\s]+\.m3u8?)")
 EXTINF_PATTERN = re.compile(r"#EXTINF:[^\n]*,(.*)")
 
-def fetch_links(playlist_url, retries=3):
+# Configure logging to track failed attempts
+logging.basicConfig(filename=LOG_FILE, level=logging.WARNING)
+
+def fetch_links(playlist_url, retries=5, backoff_factor=2):
     """Fetch and extract .m3u or .m3u8 links with retry mechanism."""
     for attempt in range(retries):
         try:
-            response = requests.get(playlist_url, timeout=10)
+            response = requests.get(playlist_url, timeout=15)  # Increased timeout
             response.raise_for_status()
             # Extract all EXTINF tags and URLs
             content = response.text
@@ -44,9 +49,15 @@ def fetch_links(playlist_url, retries=3):
             return channels
         except requests.RequestException as e:
             print(f"Error fetching {playlist_url} (Attempt {attempt + 1}): {e}")
+            # Log the failure to a file for future reference
+            logging.warning(f"Failed to fetch {playlist_url}: {e}")
+            if attempt < retries - 1:
+                # Exponential backoff: wait for longer before retrying
+                sleep_time = backoff_factor ** attempt
+                print(f"Retrying in {sleep_time} seconds...")
+                time.sleep(sleep_time)
     print(f"Failed to fetch {playlist_url} after {retries} attempts.")
-    return []
-
+    return []  # Return an empty list if all attempts fail
 
 def validate_link(channel_info):
     """Validate .m3u or .m3u8 link by attempting to play it for 10 seconds."""
@@ -65,6 +76,8 @@ def validate_link(channel_info):
                 print(f"Invalid link (Status: {response.status_code}): {url}")
     except requests.RequestException as e:
         print(f"Connection error for link {url}: {e}")
+        # Log the failure to a file for future reference
+        logging.warning(f"Failed to validate {url}: {e}")
     return None
 
 def load_existing_links(file_path):
@@ -75,7 +88,7 @@ def load_existing_links(file_path):
             lines = f.readlines()
             for i in range(0, len(lines), 2):
                 if i + 1 < len(lines):
-                    channel_name = lines[i].strip()[len("#EXTINF:-1,"):]
+                    channel_name = lines[i].strip()[len("#EXTINF:-1,"): ]
                     link = lines[i + 1].strip()
                     existing_links.add((channel_name, link))
     except FileNotFoundError:
@@ -84,7 +97,7 @@ def load_existing_links(file_path):
 
 def save_links(valid_links):
     """Save validated links with channel names to .m3u file, avoiding duplicates and ensuring manually deleted links are restored."""
-    existing_links = load_existing_links()  # Load existing entries to avoid duplicates
+    existing_links = load_existing_links(OUTPUT_FILE)  # Load existing entries to avoid duplicates
     new_links = []
 
     # Ensure manually deleted links are restored
@@ -105,7 +118,6 @@ def save_links(valid_links):
         print(f"Updated {OUTPUT_FILE} with {len(new_links)} new links.")
     else:
         print("No new links found to add.")
-
 
 def update_readme(new_links):
     """Update README.md with newly found working channels."""
@@ -145,7 +157,6 @@ def main():
 
     # Step 4: Save only new, unique links
     save_links(valid_links)
-
 
 if __name__ == "__main__":
     main()
