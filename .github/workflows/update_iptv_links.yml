@@ -32,7 +32,10 @@ jobs:
         git config --global user.email "omargoroo91@gmail.com"
         git config --global user.name "GitHub Actions"
         git add .
-        git commit -m "Update IPTV links"
-        git push origin main
+        if ! git diff-index --quiet HEAD --; then
+          git commit -m "Update IPTV links on $(date)"
+          git push origin main
+        else
+          echo "No changes to commit"
       env:
         GITHUB_TOKEN: ${{ secrets.TV_TOKEN }}  # Use the TV_TOKEN secret for authentication
