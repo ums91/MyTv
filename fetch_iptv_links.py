@@ -160,7 +160,7 @@ def main():
     with ThreadPoolExecutor(max_workers=10) as executor:
         valid_links = list(filter(None, executor.map(validate_link, all_links)))
 
-    # Step 4: Save only new, unique links
+    # Step 4: Save all fetched links
     save_links(valid_links)
 
 if __name__ == "__main__":
