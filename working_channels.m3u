@@ -1,3 +1,86 @@
+
+#EXTM3U
+#EXTINF:-1,Star Sports Hindi
+https://hotstarauto-join-us-on-telegram-streamkingliveo.pages.dev/ssh1.m3u8
+#EXTINF:-1,Disney Cartoon
+https://hotstarauto-join-us-on-telegram-streamkingliveo.pages.dev/disney.m3u8
+#EXTINF:-1,Hungama
+https://hotstarauto-join-us-on-telegram-streamkingliveo.pages.dev/hungama.m3u8
+#EXTINF:-1,Star Jalsha
+https://hotstarauto-join-us-on-telegram-streamkingliveo.pages.dev/starjalsha.m3u8
+#EXTINF:-1,Super Hungama
+https://hotstarauto-join-us-on-telegram-streamkingliveo.pages.dev/superhungama.m3u8
+#EXTINF:-1,Star Thrills
+https://hotstarauto-join-us-on-telegram-streamkingliveo.pages.dev/starthrills.m3u8
+#EXTINF:-1,Star Plus
+http://103.72.179.30:1935/GECHindi/STAR_PLUS.stream_720p/Playlist.m3u8?token=test
+#EXTINF:-1,Star Plus UK
+http://144.217.70.181:9587/hin2/STARPLUSUK/tracks-v1a1/mono.m3u8?token=test
+#EXTINF:-1,Manoranjan TV
+http://playchannel.ml?//idvd.multitvsolution.com/idvo/manoranjantv.m3u8
+#EXTINF:-1,Star Gold HD
+http://144.217.70.181:9587/hin2/STARGOLDUK/tracks-v1a1/mono.m3u8?token=test
+#EXTINF:-1,Star Gold 2
+http://144.217.70.181:9587/hin2/STARGOLD2/tracks-v1a1/mono.m3u8?token=test
+#EXTINF:-1,MTV Beats HD
+http://144.217.70.181:9587/hin2/MTVBEATSHD/tracks-v1a1/playlist.m3u8?token=test
+#EXTINF:-1,Aaj Tak
+http://playchannel.ml?//aajtaklive-amd.akamaized.net/hls/live/2014416/aajtak/aajtaklive/playlist.m3u8
+#EXTINF:-1,Colors TV
+http://208.86.19.13:81/204.stream/index.m3u8
+#EXTINF:-1,Sun Music Tamil
+http://uk1.zecast.com:1935/star-live/smusic/index.m3u8
+#EXTINF:-1,Jaya TV HD
+http://uk4.zecast.com:1935/star-live/jaya/playlist.m3u8
+#EXTINF:-1,Sakthi TV
+http://uk1.zecast.com:1935/star-live/shakthi/chunklist.m3u8
+#EXTINF:-1,TVI SD Tamil
+http://live.tamilvision.tv:8081/TVI/SD/playlist.m3u8
+#EXTINF:-1,Athavan TV
+http://45.77.66.224:1935/athavantv/live_360p/playlist.m3u8
+#EXTINF:-1,Sports 18 1 HD
+http://playchannel.ml?https://tv.media.jio.com:443/switch/bpk-tv/Sports18_1_HD_voot_MOB/output03/hls/index.m3u8
+#EXTINF:-1,Goldmines
+https://playchannel.ml?https://livetv-channels.b-cdn.net/8046/chunklist0.m3u8
+#EXTINF:-1,Goldmines Bhojpuri
+https://playchannel.ml?https://livetv-channels.b-cdn.net/8075/chunklist0.m3u8
+#EXTINF:-1,Dil Se Music
+https://playchannel.ml?https://live.hungama.com/linear/dil-se/playlist.m3u8
+#EXTINF:-1,Dhammal Music
+https://playchannel.ml?https://live.hungama.com/linear/dhamaal/playlist.m3u8
+#EXTINF:-1,Kadak Hits
+https://playchannel.ml?https://live.hungama.com/linear/kadak-hits/playlist.m3u8
+#EXTINF:-1,Pop Music
+https://playchannel.ml?https://live.hungama.com/linear/pop-pataka/playlist.m3u8
+#EXTINF:-1,Dangal
+https://enterr10-live.streamready.in/pub-iodang10p4al/liveabr/playlist.m3u8
+#EXTINF:-1,Dangal 2
+https://enterr10-live.streamready.in/pub-iodanga2a26kj2/liveabr/playlist.m3u8
+#EXTINF:-1,Bhojpuri Cinema
+https://enterr10-live.streamready.in/pub-iobhojpuqbu6yj/liveabr/playlist.m3u8
+#EXTINF:-1,Enterr10 Bangla
+https://enterr10-live.streamready.in/pub-iobanglakp3sff/liveabr/playlist.m3u8
+#EXTINF:-1,DD National
+https://d75dqofg5kmfk.cloudfront.net/bpk-tv/Ddnational/default/index.m3u8
+#EXTINF:-1,Tsports
+https://live.tsports.com/live/tsports_live_720/index.m3u8
+#EXTINF:-1,Zee News
+https://d3859l818t7v85.cloudfront.net/hlslive/Admin/px0219322/live/WatchoZee/master.m3u8
+#EXTINF:-1,India TV
+https://d1ribbj7ls43cr.cloudfront.net/hls/0091.IndiaTV.in.m3u8
+#EXTINF:-1,ABP News
+https://d1ribbj7ls43cr.cloudfront.net/hls/7014.ABPNews.in.m3u8
+#EXTINF:-1,Republic Bharat
+https://ottrb12.republicworld.com/httppush/ottrb_republic_hindi/ottrb/master.m3u8
+#EXTINF:-1,India News
+https://livetv.newsx.com/itv/itvnetwork5/playlist.m3u8
+#EXTINF:-1,Discovery Kids
+https://dplus.gammacdn.workers.dev/streams/113.m3u8
+#EXTINF:-1,Star Sports Tamil
+http://playchannel.ml/?http://mag.x-iptv.live:80/play/live.php?mac=00:1a:79:02:c9:fa&stream=155873&extension=m3u8&play_token=Eq2BON6iCn&e=m3u8
+
+
+
 #EXTINF:-1,Dunya News (UK Feed) (720p) [Not 24/7]
 https://ukintl.dunyanews.tv/liveuk/ngrp:dunyalive_all/playlist.m3u8
 #EXTINF:-1,Channel Divya (720p)
